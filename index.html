@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iRead</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a2e;
+      font-family: 'Apple SD Gothic Neo', sans-serif;
+      color: white;
+    }
+    .card {
+      text-align: center;
+      padding: 48px 32px;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 48px;
+      color: #aaa;
+      letter-spacing: 0.05em;
+    }
+    .play-btn {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: none;
+      background: #e8d5b7;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      transition: transform 0.1s, background 0.2s;
+    }
+    .play-btn:hover { background: #f0e0c5; transform: scale(1.05); }
+    .play-btn:active { transform: scale(0.97); }
+    .play-btn svg { width: 48px; height: 48px; fill: #1a1a2e; }
+    .status {
+      font-size: 1rem;
+      color: #888;
+      min-height: 1.5em;
+    }
+    audio { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Tara Prayer for Prosperity</h1>
+
+    <button class="play-btn" id="playBtn" aria-label="재생">
+      <svg viewBox="0 0 24 24" id="icon">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </button>
+
+    <p class="status" id="status" role="status" aria-live="polite">탭하여 재생</p>
+  </div>
+
+  <audio id="audio" src="Tara Prayer for Prosperity.mp3" preload="auto"></audio>
+
+  <script>
+    const btn = document.getElementById('playBtn');
+    const audio = document.getElementById('audio');
+    const status = document.getElementById('status');
+    const icon = document.getElementById('icon');
+
+    const PLAY_ICON = 'M8 5v14l11-7z';
+    const PAUSE_ICON = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
+
+    btn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play', () => {
+      icon.setAttribute('d', PAUSE_ICON);
+      btn.setAttribute('aria-label', '일시정지');
+      status.textContent = '재생 중…';
+    });
+
+    audio.addEventListener('pause', () => {
+      icon.setAttribute('d', PLAY_ICON);
+      btn.setAttribute('aria-label', '재생');
+      status.textContent = '일시정지됨';
+    });
+
+    audio.addEventListener('ended', () => {
+      icon.setAttribute('d', PLAY_ICON);
+      btn.setAttribute('aria-label', '재생');
+      status.textContent = '재생 완료';
+    });
+
+    audio.addEventListener('error', () => {
+      status.textContent = '음성 파일을 불러올 수 없습니다';
+    });
+  </script>
+</body>
+</html>
